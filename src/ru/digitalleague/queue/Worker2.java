@@ -8,7 +8,7 @@ public class Worker2 {
         this.toDoDeque = toDoDeque;
     }
     public void takeTask() {
-        Object task = toDoDeque.pollLast(); // вынимаем задание из конца Deque
+        Object task = toDoDeque.poll(); // вынимаем задание из конца Deque
         if (task != null) {
             System.out.println("Выполняю задачу: " + task);
         } else {
