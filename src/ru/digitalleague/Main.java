@@ -7,6 +7,7 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
+        System.out.println("sfsdf");
 //        int[] mas = {2,3,1};
 //        int[] mas2 = new int[5];
 //        Arrays.binarySearch(mas,3);
