@@ -33,7 +33,7 @@ public class Storage {
     public static void removeObject(String objectName) {
         if (isInStock(objectName)) {
             storage.remove(objectName);
-            System.out.printf("Object %s successfully added. \n", objectName);
+            System.out.printf("Object %s successfully removed. \n", objectName);
         } else {
             System.out.printf("Removing failure. Object %s not found.\n", objectName);
         }
