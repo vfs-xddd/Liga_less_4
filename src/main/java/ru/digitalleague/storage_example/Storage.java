@@ -1,6 +1,7 @@
 package ru.digitalleague.storage_example;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Класс, описывающий работу со складом
@@ -17,11 +18,11 @@ public class Storage {
      * @param objectName   название вещи
      * @param objectAmount количество вещей
      */
-    public static void addObject(String objectName, int objectAmount) {
+    public static boolean addObject(String objectName, int objectAmount) {
         if (isInStock(objectName)) {
-            addToExistObject(objectName, objectAmount);
+            return addToExistObject(objectName, objectAmount);
         } else {
-            addNewObject(objectName, objectAmount);
+            return addNewObject(objectName, objectAmount);
         }
     }
 
@@ -30,12 +31,14 @@ public class Storage {
      *
      * @param objectName название вещи
      */
-    public static void removeObject(String objectName) {
+    public static boolean removeObject(String objectName) {
         if (isInStock(objectName)) {
             storage.remove(objectName);
             System.out.printf("Object %s successfully removed. \n", objectName);
+            return true;
         } else {
             System.out.printf("Removing failure. Object %s not found.\n", objectName);
+            return false;
         }
     }
 
@@ -55,8 +58,8 @@ public class Storage {
      * @param objectName название вещи
      */
     public static void findObject(String objectName) {
-        if (isInStock(objectName)) {
-            System.out.printf("Object %s exist.\n", objectName);
+        if (getProductAmount(objectName) != 0) {
+            System.out.printf("Object %s is present in %s pcs\n", objectName, getProductAmount(objectName));
         } else {
             System.out.printf("Object %s not found.\n", objectName);
         }
@@ -68,12 +71,14 @@ public class Storage {
      * @param name   название вещи
      * @param amount количество вещей
      */
-    private static void addToExistObject(String name, int amount) {
+    private static boolean addToExistObject(String name, int amount) {
         if (storage.get(name) + amount > ONE_ITEM_AMOUNT) {
             System.out.printf("Sorry! You can add only %s of %s\n", ONE_ITEM_AMOUNT - storage.get(name), name);
+            return false;
         } else {
             storage.put(name, storage.get(name) + amount);
             System.out.printf("%s of %s(s) successfully added. \n", amount, name);
+            return true;
         }
     }
 
@@ -83,16 +88,19 @@ public class Storage {
      * @param name   название вещи
      * @param amount количество вещей
      */
-    private static void addNewObject(String name, int amount) {
+    private static boolean addNewObject(String name, int amount) {
         if (getFreePlaces() > 0) {
             if (amount > ONE_ITEM_AMOUNT) {
                 System.out.printf("Sorry! You can add only %s of %s\n", ONE_ITEM_AMOUNT, name);
+                return false;
             } else {
                 storage.put(name, amount);
                 System.out.printf("%s of %s(s) successfully added. \n", amount, name);
+                return true;
             }
         } else {
             System.out.println("Cannot add object. No free space.\n");
+            return false;
         }
     }
 
@@ -121,5 +129,15 @@ public class Storage {
     public static int getFreePlaces() {
         checkFreePlaces();
         return freePlaces;
+    }
+
+    /**
+     * Получает количество вещи на складе
+     *
+     * @param productName название вещи
+     * @return количество вещи на складе (если ее нет, то возвращается 0)
+     */
+    public static int getProductAmount(String productName) {
+        return storage.getOrDefault(productName, 0);
     }
 }
